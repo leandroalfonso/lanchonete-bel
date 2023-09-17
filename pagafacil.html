@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Contas a Pagar</title>
+
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            padding: 20px;
+            background-color: #565657;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        form {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-check-input[type="radio"] {
+            margin-right: 5px;
+        }
+
+        table {
+            width: 100%;
+            background-color: #fff;
+        }
+
+        th, td {
+            padding: 10px;
+        }
+
+        /* Estilos para linhas verdes e azuis */
+        .green-row {
+            background-color: #c6efce;
+        }
+
+        .blue-row {
+            background-color: #c2e2f7;
+        }
+
+        .table-button {
+            text-align: center;
+        }
+
+        /* Estilos para o checkbox */
+        .custom-control-label::before {
+            border-radius: 5px;
+        }
+        .form-check-label{
+                margin-left: 2px;
+                font-size: 16px;
+                font-weight: 500;
+              
+            }
+
+        /* Estilos para dispositivos móveis */
+        @media screen and (max-width: 768px) {
+            body {
+                font-family: 'Roboto', sans-serif;
+            }
+
+            form {
+                margin: 0;
+                padding: 0;
+            }
+            input[type="text"], input[type="password"] {
+                width: 100%;
+                padding: 8px;
+                margin-bottom: 15px;
+            }
+            .col-md-6{
+                padding: 20px;
+
+            }
+
+            #billForm{
+                padding: 20px;
+            }
+            .form-check-label{
+                margin-left: 2px;
+                font-size: 16px;
+                font-weight: 500;
+              
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-4">Cadastro de Contas a Pagar</h1>
+        <div class="row">
+            <div class="col-md-6 mt-4">
+                <form id="billForm">
+                    <div class="form-group">
+                        <label for="billName">Nome da Conta:</label>
+                        <input type="text" id="billName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="billType">Tipo de Conta:</label>
+                        <select id="billType" class="form-control">
+                            <option value="Energia">Energia</option>
+                            <option value="Água">Água</option>
+                            <option value="Educação">Educação</option>
+                            <option value="Condomínio">Condomínio</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="accountName">Nome de Usuário da Conta:</label>
+                        <input type="text" id="accountName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="accountPassword">Senha da Conta:</label>
+                        <input type="password" id="accountPassword" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="accountLink">Link da Conta:</label>
+                        <input type="text" id="accountLink" class="form-control">
+                    </div>
+                    <!-- Botão para adicionar dados da conta -->
+                    <button type="submit" class="btn btn-success">Adicionar Conta</button>
+                </form>
+            </div>
+            <div class="col-md-6 mt-4">
+                <h2>Contas a Pagar</h2>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Nome da Conta</th>
+                                <th>Tipo</th>
+                                <th>Data de Vencimento</th>
+                                <th>Avisos de Pagamento</th>
+                                <th>Boleto Disponível</th>
+                                <th class="table-button">Imprimir Boleto</th>
+                            </tr>
+                        </thead>
+                        <tbody id="billTableBody">
+                            <!-- Os dados das contas serão inseridos aqui -->
+                        </tbody>
+                    </table>
+                </div>
+                <p class="mt-4">Observação: Linhas verdes indicam boleto disponível, linhas azuis indicam boleto não disponível.</p>
+                <div class="form-check mb-3">
+                    <input type="checkbox" class="form-check-input" id="notificationCheckbox">
+                    <label class="form-check-label" for="notificationCheckbox" style="color: rgb(78, 77, 77);">Receber notificação quando o boleto estiver disponível</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function addBillToTable(billName, billType, dueDate, paymentNotice, boletoAvailable) {
+            const bill = { name: billName, type: billType, dueDate: dueDate, paymentNotice: paymentNotice, boletoAvailable: boletoAvailable };
+            const tableBody = document.getElementById("billTableBody");
+            const newRow = tableBody.insertRow();
+            newRow.innerHTML = `<td>${billName}</td><td>${billType}</td><td>${dueDate}</td><td>${paymentNotice}</td><td>${boletoAvailable ? 'Sim' : 'Não'}</td><td><button class="btn btn-primary">Imprimir</button></td>`;
+            
+            // Defina a classe CSS com base na disponibilidade do boleto
+            newRow.classList.add(boletoAvailable ? 'green-row' : 'blue-row');
+
+            let storedBills = JSON.parse(localStorage.getItem("bills")) || [];
+            storedBills.push(bill);
+            localStorage.setItem("bills", JSON.stringify(storedBills));
+        }
+
+        function loadBillsFromStorage() {
+            const storedBills = JSON.parse(localStorage.getItem("bills")) || [];
+            const tableBody = document.getElementById("billTableBody");
+            for (const bill of storedBills) {
+                const newRow = tableBody.insertRow();
+                newRow.innerHTML = `<td>${bill.name}</td><td>${bill.type}</td><td>${bill.dueDate}</td><td>${bill.paymentNotice}</td><td>${bill.boletoAvailable ? 'Sim' : 'Não'}</td><td><button class="btn btn-primary">Imprimir</button></td>`;
+                newRow.classList.add(bill.boletoAvailable ? 'green-row' : 'blue-row');
+            }
+        }
+
+        document.getElementById("billForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+            const billName = document.getElementById("billName").value;
+            const billType = document.getElementById("billType").value;
+            
+            // Gere uma data aleatória entre 1 e 30 dias a partir da data atual
+            const today = new Date();
+            const dueDate = new Date(today.getTime() + Math.floor(Math.random() * 30) * 24 * 60 * 60 * 1000);
+            
+            // Formate a data de vencimento para o formato "YYYY-MM-DD"
+            const formattedDueDate = dueDate.toISOString().split("T")[0];
+            
+            // Crie um aviso de pagamento fictício
+            const daysUntilDue = Math.floor((dueDate - today) / (24 * 60 * 60 * 1000));
+            const paymentNotice = `Faltam ${daysUntilDue} dias para vencer`;
+            
+            // Simule a disponibilidade aleatória do boleto
+            const boletoAvailable = Math.random() < 0.5; // 50% de chance de disponibilidade
+            
+            addBillToTable(billName, billType, formattedDueDate, paymentNotice, boletoAvailable);
+            document.getElementById("billForm").reset();
+        });
+
+        loadBillsFromStorage();
+    </script>
+</body>
+</html>
