@@ -80,6 +80,12 @@
                 font-weight: 500;
               
             }
+            .green-row {
+                background-color: #6ceb85;
+            }
+            .blue-row {
+                background-color: #49a3df;
+            }
 
         /* Estilos para dispositivos móveis */
         @media screen and (max-width: 768px) {
@@ -109,6 +115,12 @@
                 font-size: 16px;
                 font-weight: 500;
               
+            }
+            .green-row {
+                background-color: #c6efce;
+            }
+            .blue-row {
+                background-color: #c2e2f7;
             }
         }
     </style>
@@ -148,7 +160,7 @@
                         <input type="text" id="accountLink" class="form-control">
                     </div>
                     <!-- Botão para adicionar dados da conta -->
-                    <button type="submit" class="btn btn-success">Adicionar Conta</button>
+                    <button type="submit" class="btn btn-success w-100 h-50">Adicionar Conta</button>
                 </form>
             </div>
             <div class="col-md-6 mt-4">
@@ -170,7 +182,7 @@
                         </tbody>
                     </table>
                 </div>
-                <p class="mt-4">Observação: Linhas verdes indicam boleto disponível, linhas azuis indicam boleto não disponível.</p>
+              
                 <div class="form-check mb-3">
                     <input type="checkbox" class="form-check-input" id="notificationCheckbox">
                     <label class="form-check-label" for="notificationCheckbox" style="color: rgb(78, 77, 77);">Receber notificação quando o boleto estiver disponível</label>
